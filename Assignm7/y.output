@@ -1,0 +1,191 @@
+   0  $accept : stmt $end
+
+   1  stmt : exp NL
+
+   2  exp : exp '+' exp
+   3      | exp '-' exp
+   4      | exp '*' exp
+   5      | exp '/' exp
+   6      | '(' exp ')'
+   7      | ID
+   8      | NUMBER
+
+state 0
+	$accept : . stmt $end  (0)
+
+	NUMBER  shift 1
+	ID  shift 2
+	'('  shift 3
+	.  error
+
+	stmt  goto 4
+	exp  goto 5
+
+
+state 1
+	exp : NUMBER .  (8)
+
+	.  reduce 8
+
+
+state 2
+	exp : ID .  (7)
+
+	.  reduce 7
+
+
+state 3
+	exp : '(' . exp ')'  (6)
+
+	NUMBER  shift 1
+	ID  shift 2
+	'('  shift 3
+	.  error
+
+	exp  goto 6
+
+
+state 4
+	$accept : stmt . $end  (0)
+
+	$end  accept
+
+
+state 5
+	stmt : exp . NL  (1)
+	exp : exp . '+' exp  (2)
+	exp : exp . '-' exp  (3)
+	exp : exp . '*' exp  (4)
+	exp : exp . '/' exp  (5)
+
+	NL  shift 7
+	'+'  shift 8
+	'-'  shift 9
+	'*'  shift 10
+	'/'  shift 11
+	.  error
+
+
+state 6
+	exp : exp . '+' exp  (2)
+	exp : exp . '-' exp  (3)
+	exp : exp . '*' exp  (4)
+	exp : exp . '/' exp  (5)
+	exp : '(' exp . ')'  (6)
+
+	'+'  shift 8
+	'-'  shift 9
+	'*'  shift 10
+	'/'  shift 11
+	')'  shift 12
+	.  error
+
+
+state 7
+	stmt : exp NL .  (1)
+
+	.  reduce 1
+
+
+state 8
+	exp : exp '+' . exp  (2)
+
+	NUMBER  shift 1
+	ID  shift 2
+	'('  shift 3
+	.  error
+
+	exp  goto 13
+
+
+state 9
+	exp : exp '-' . exp  (3)
+
+	NUMBER  shift 1
+	ID  shift 2
+	'('  shift 3
+	.  error
+
+	exp  goto 14
+
+
+state 10
+	exp : exp '*' . exp  (4)
+
+	NUMBER  shift 1
+	ID  shift 2
+	'('  shift 3
+	.  error
+
+	exp  goto 15
+
+
+state 11
+	exp : exp '/' . exp  (5)
+
+	NUMBER  shift 1
+	ID  shift 2
+	'('  shift 3
+	.  error
+
+	exp  goto 16
+
+
+state 12
+	exp : '(' exp ')' .  (6)
+
+	.  reduce 6
+
+
+state 13
+	exp : exp . '+' exp  (2)
+	exp : exp '+' exp .  (2)
+	exp : exp . '-' exp  (3)
+	exp : exp . '*' exp  (4)
+	exp : exp . '/' exp  (5)
+
+	'*'  shift 10
+	'/'  shift 11
+	NL  reduce 2
+	'+'  reduce 2
+	'-'  reduce 2
+	')'  reduce 2
+
+
+state 14
+	exp : exp . '+' exp  (2)
+	exp : exp . '-' exp  (3)
+	exp : exp '-' exp .  (3)
+	exp : exp . '*' exp  (4)
+	exp : exp . '/' exp  (5)
+
+	'*'  shift 10
+	'/'  shift 11
+	NL  reduce 3
+	'+'  reduce 3
+	'-'  reduce 3
+	')'  reduce 3
+
+
+state 15
+	exp : exp . '+' exp  (2)
+	exp : exp . '-' exp  (3)
+	exp : exp . '*' exp  (4)
+	exp : exp '*' exp .  (4)
+	exp : exp . '/' exp  (5)
+
+	.  reduce 4
+
+
+state 16
+	exp : exp . '+' exp  (2)
+	exp : exp . '-' exp  (3)
+	exp : exp . '*' exp  (4)
+	exp : exp . '/' exp  (5)
+	exp : exp '/' exp .  (5)
+
+	.  reduce 5
+
+
+11 terminals, 3 nonterminals
+9 grammar rules, 17 states

@@ -1,0 +1,9 @@
+Index  Instruction
+1      INCR &ARG1 &ARG2
+
+2      ADD AREG &ARG1
+
+3      ADD BREG &ARG2
+
+4      MEND
+
